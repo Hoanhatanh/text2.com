@@ -1,0 +1,377 @@
+<!doctype html>
+
+
+  
+  Text2 - Công nghệ & Công cụ AI
+  
+  <!-- CSS giữ nguyên như bạn đã có ở trên -->
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+  color: #ffffff;
+  overflow: hidden;
+}
+
+/* Popup phủ toàn bộ */
+.popup {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(31, 31, 31, 0.85);
+  backdrop-filter: blur(10px);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+/* Khi thêm lớp hidden thì sẽ fadeOut */
+.popup.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Header */
+header {
+  background: rgba(33, 37, 41, 0.8);
+  padding: 20px;
+  text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.7);
+  flex-shrink: 0;
+  border-bottom: 1px solid #444;
+}
+
+/* Navbar */
+nav {
+  background: rgba(44, 47, 51, 0.8);
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  padding: 15px 0;
+  flex-shrink: 0;
+}
+
+nav a {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+  font-size: 16px;
+}
+
+nav a:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+/* Search */
+.search-container {
+  text-align: center;
+  margin: 20px 0;
+  flex-shrink: 0;
+}
+
+.search-container input[type="text"] {
+  width: 50%;
+  padding: 14px 20px;
+  border-radius: 50px;
+  border: 1px solid #555;
+  outline: none;
+  font-size: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  backdrop-filter: blur(6px);
+  transition: all 0.3s ease;
+}
+
+.search-container input[type="text"]:focus {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #888;
+}
+
+/* Title */
+.popup-title {
+  text-align: center;
+  font-size: 17px;
+  font-weight: 700;
+  background: rgba(33, 37, 41, 0.8);
+  padding: 10px 25px;
+  margin: 25px auto 15px;
+  border-radius: 20px;
+  width: fit-content;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+}
+
+/* Icon container */
+.icon-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  flex-grow: 1;
+}
+
+/* Icon item */
+.icon {
+  text-align: center;
+  text-decoration: none;
+  background: linear-gradient(145deg, #292929, #1f1f1f);
+  padding: 15px 10px;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  color: #ffffff;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.7);
+  position: relative;
+  overflow: hidden;
+}
+
+.icon::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 60%);
+  transform: rotate(25deg);
+  pointer-events: none;
+}
+
+.icon p {
+  font-size: 12px;
+  margin-top: 6px;
+  letter-spacing: 0.5px;
+}
+
+.icon:hover {
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.9);
+  background: linear-gradient(145deg, #343a40, #23272a);
+}
+
+/* Icon Image */
+.icon img {
+  width: 60px;
+  height: 60px;
+  border-radius: 20%;
+  object-fit: cover;
+  margin-bottom: 8px;
+  border: 4px solid #343a40;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+}
+
+/* Footer */
+footer {
+  background: rgba(33, 37, 41, 0.8);
+  text-align: center;
+  padding: 20px;
+  font-size: 20px;
+  flex-shrink: 0;
+  border-top: 1px solid #444;
+  box-shadow: 0 -4px 10px rgba(0,0,0,0.5);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .search-container input[type="text"] {
+    width: 80%;
+  }
+  .icon-container {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    padding: 10px;
+  }
+  .icon img {
+    width: 50px;
+    height: 50px;
+  }
+  .icon p {
+    font-size: 10px;
+  }
+  header {
+    font-size: 22px;
+  }
+  footer {
+    font-size: 16px;
+  }
+  nav a {
+    font-size: 14px;
+    padding: 8px 14px;
+  }
+}
+</style>
+  <style>
+    /* --- Thêm popup iframe fullscreen --- */
+    .iframe-popup {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.9);
+      z-index: 10000;
+      display: none;
+      flex-direction: column;
+    }
+
+    .iframe-popup iframe {
+      flex-grow: 1;
+      border: none;
+      width: 100%;
+    }
+
+    .iframe-popup .popup-header {
+      background: #111;
+      color: #fff;
+      padding: 10px 20px;
+      font-size: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .iframe-popup .close-btn {
+      cursor: pointer;
+      background: #ff4d4d;
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      padding: 6px 14px;
+      border-radius: 8px;
+    }
+
+    .iframe-popup .close-btn:hover {
+      background: #e63939;
+    }
+  </style>
+
+
+
+  <!-- Popup gốc của bạn giữ nguyên -->
+  <div class="popup">
+    <header>Text2 - Together let's join hands to make a difference.</header>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#tools">App</a>
+      <a href="#about">Giới Thiệu</a>
+      <a href="https://www.text2.click/2025/04/contact-us.html">Contact</a>
+    </nav>
+
+    <div class="search-container">
+      <input type="text" placeholder="Tìm kiếm công cụ..." />
+    </div>
+
+
+
+    <div class="icon-container">
+      <!-- Chỉ cần giữ nguyên link trong href -->
+  <div class="icon-container">
+    <a href="https://www.text2.click/p/text2-chat-bot-chat-ai-tieng-viet.html" class="icon">
+      <img src="https://pbs.twimg.com/media/Gors6tEbQAArY8Q?format=jpg&name=small" alt="Chat AI Vietnamese" />
+      <p>Chat AI Vietnamese</p>
+    </a>
+
+    <a href="https://www.text2.click/p/text2-chat-ai.html" class="icon">
+      <img src="https://pbs.twimg.com/media/Gors6tEbQAArY8Q?format=jpg&name=small" alt="Chat AI English" />
+      <p>Chat AI English</p>
+    </a>
+
+    <a href="https://www.youtube.com/@Text2_click" class="icon">
+      <img src="https://www.youtube.com/img/desktop/yt_1200.png" alt="YouTube Text2" />
+      <p>YouTube Text2</p>
+    </a>
+
+    <a href="https://www.text2.click/p/love-fortune-telling-name.html" class="icon">
+      <img src="https://free.vector6.com/wp-content/uploads/2020/05/0io92dz-Vector-Trai-Tim-Tinh-Yeu-018.jpg" alt="Love fortune telling" />
+      <p>Love fortune telling</p>
+    </a>
+
+    <a href="https://www.text2.click/2025/04/contact-us.html" class="icon">
+      <img src="https://png.pngtree.com/png-clipart/20191120/original/pngtree-chat-icon-png-image_5065642.jpg" alt="Contact" />
+      <p>Contact</p>
+    </a>
+
+    <a href="https://www.text2.click/p/read-html-css-javascript-text2.html" class="icon">
+      <img src="https://pbs.twimg.com/media/GoaqBuBXQAE5OlR?format=png&name=small" alt="Read HTML" />
+      <p>Read HTML</p>
+    </a>
+
+    <a href="https://www.text2.click/p/sua-loi-chinh-ta.html" class="icon">
+      <img src="https://pbs.twimg.com/media/Gors6tEacAAouP9?format=jpg&name=small" alt="Sửa lỗi chính tả" />
+      <p>Sửa lỗi chính tả Vietnamese</p>
+    </a>
+
+    <a href="https://www.text2.click/p/correct-spelling-english.html" class="icon">
+      <img src="https://pbs.twimg.com/media/Gors6tEacAAouP9?format=jpg&name=small" alt="Correct spelling English" />
+      <p>Correct spelling English</p>
+    </a>
+
+    <a href="https://www.text2.click/p/create-qr-code.html" class="icon">
+      <img src="https://pbs.twimg.com/media/Gos2YzlacAAvk22?format=png&name=small" alt="Create QR Code" />
+      <p>Create QR Code</p>
+    </a>
+
+    <a href="https://www.text2.click/p/img-design-text2.html" class="icon">
+      <img src="https://pbs.twimg.com/media/GpI7Nb2a4AAcTPE?format=png&name=small" alt="IMG Design" />
+      <p>IMG Design</p>
+    </a>
+
+    <a href="https://www.text2.click/p/img-edit-text2.html" class="icon">
+      <img src="https://pbs.twimg.com/media/GpJi7rHboAACZBq?format=png&name=small" alt="IMG Edit" />
+      <p>IMG Edit</p>
+    </a>
+  </div>
+      <!-- Thêm các icon khác như cũ -->
+    </div>
+
+    <footer>
+      © 2025 Text2.click | Công nghệ cho tương lai.
+    </footer>
+  </div>
+
+  <!-- 🆕 Popup iframe toàn màn hình -->
+  <div class="iframe-popup" id="iframePopup">
+    <div class="popup-header">
+      <span>Đang tải ứng dụng...</span>
+      <button class="close-btn" onclick="closeIframePopup()">Đóng</button>
+    </div>
+    <iframe id="popupIframe" src=""></iframe>
+  </div>
+
+  <!-- 🧠 JavaScript xử lý mở/đóng popup -->
+  <script>
+    // Ẩn popup gốc nếu không ở trang chủ
+    if (window.location.pathname !== "/" && window.location.pathname !== "/index.html") {
+      document.querySelector('.popup').classList.add('hidden');
+    }
+
+    // Mở iframe popup khi click vào icon
+    const icons = document.querySelectorAll('.icon');
+    icons.forEach(icon => {
+      icon.addEventListener('click', function(e) {
+        e.preventDefault(); // Ngăn chuyển trang
+        const url = this.getAttribute('href');
+        document.getElementById('popupIframe').src = url;
+        document.getElementById('iframePopup').style.display = 'flex';
+      });
+    });
+
+    // Đóng popup
+    function closeIframePopup() {
+      document.getElementById('iframePopup').style.display = 'none';
+      document.getElementById('popupIframe').src = ''; // Dọn src để giảm tải
+    }
+  </script>
+
+</!doctype>
